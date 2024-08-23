@@ -7,6 +7,23 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  levelOrder(callback) {
+    if (callback == null) {
+      throw new Error('No callback is specified!');
+    }
+    const queue = [this.root];
+    let node;
+    while (queue.length != 0) {
+      node = queue.shift();
+      if (node == null) {
+        continue;
+      }
+      callback(node);
+      queue.push(node.left);
+      queue.push(node.right);
+    }
+  }
+
   find(value) {
     let node = this.root;
     while (node != null) {
@@ -19,7 +36,7 @@ class Tree {
       }
       node = node.right;
     }
-    return node
+    return node;
   }
 
   deleteItem(value) {
@@ -36,7 +53,7 @@ class Tree {
         node = node.right;
       }
     }
-    
+
     if (node == null) return;
     if (node.left == null) {
       node = node.right;
@@ -46,9 +63,9 @@ class Tree {
     }
 
     if (value < parentNode.data) {
-      parentNode.left = node
+      parentNode.left = node;
     } else {
-      parentNode.right = node
+      parentNode.right = node;
     }
   }
 
@@ -105,6 +122,7 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 // const arr = [1, 2, 5, 6, 7];
 const tree = new Tree(arr);
 prettyPrint(tree.root);
-tree.deleteItem(8);
-prettyPrint(tree.root);
+tree.levelOrder((node) => {
+  console.log(node.data);
+});
 export default Tree;
