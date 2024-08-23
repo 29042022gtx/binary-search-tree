@@ -24,6 +24,31 @@ class Tree {
     }
   }
 
+  levelOrderRec(callback) {
+    if (callback == null) {
+      throw new Error('No callback is specified!');
+    }
+    const root = this.root;
+    subLevelOrderRec();
+
+    function subLevelOrderRec(arr = [root]) {
+      if (arr.length == 0) {
+        return [];
+      }
+      const newArr = [];
+      for (let i = 0; i < arr.length; i++) {
+        callback(arr[i]);
+        if (arr[i].left != null) {
+          newArr.push(arr[i].left);
+        }
+        if (arr[i].right != null) {
+          newArr.push(arr[i].right);
+        }
+      }
+      subLevelOrderRec(newArr);
+    }
+  }
+
   find(value) {
     let node = this.root;
     while (node != null) {
@@ -123,6 +148,9 @@ const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const tree = new Tree(arr);
 prettyPrint(tree.root);
 tree.levelOrder((node) => {
+  console.log(node.data);
+});
+tree.levelOrderRec((node) => {
   console.log(node.data);
 });
 export default Tree;
