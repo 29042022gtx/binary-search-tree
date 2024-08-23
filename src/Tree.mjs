@@ -7,6 +7,29 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  insert(value) {
+    let node = this.root;
+    if (node == null) {
+      this.root = new Node(value);
+      return;
+    }
+    while (true) {
+      if (value < node.data) {
+        if (node.left == null) {
+          node.left = new Node(value);
+          break;
+        }
+        node = node.left;
+        continue;
+      }
+      if (node.right == null) {
+        node.right = new Node(value);
+        break;
+      }
+      node = node.right;
+    }
+  }
+
   buildTree(array, start = 0, end = arr.length - 1) {
     if (start > end) return null;
 
@@ -32,9 +55,11 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
   }
 };
 
-console.clear();
+console.log('\x1b[2J\x1b[3J\x1b[H');
 const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// const arr = [1, 2, 5, 6, 7];
 const tree = new Tree(arr);
+tree.insert(8);
 prettyPrint(tree.root);
 
 export default Tree;
