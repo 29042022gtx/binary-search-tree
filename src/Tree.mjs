@@ -7,6 +7,25 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  inOrder(callback) {
+    function subInOrder(node) {
+      if (node == null) {
+        return []
+      }
+      return subInOrder(node.right)
+        .concat(node)
+        .concat(subInOrder(node.left))
+    }
+
+    if (callback == null) {
+      throw new Error('No callback is specified!');
+    }
+    const arr = subInOrder(this.root);
+    for (let i = arr.length - 1; i >= 0; i--) {
+      callback(arr[i])
+    }
+  }
+
   levelOrder(callback) {
     if (callback == null) {
       throw new Error('No callback is specified!');
@@ -25,12 +44,6 @@ class Tree {
   }
 
   levelOrderRec(callback) {
-    if (callback == null) {
-      throw new Error('No callback is specified!');
-    }
-    const root = this.root;
-    subLevelOrderRec();
-
     function subLevelOrderRec(arr = [root]) {
       if (arr.length == 0) {
         return [];
@@ -47,6 +60,12 @@ class Tree {
       }
       subLevelOrderRec(newArr);
     }
+
+    if (callback == null) {
+      throw new Error('No callback is specified!');
+    }
+    const root = this.root;
+    subLevelOrderRec();
   }
 
   find(value) {
@@ -143,14 +162,16 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 };
 
 console.log('\x1b[2J\x1b[3J\x1b[H');
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const arr = [1, 2, 3, 4, 5, 6, 7];
 // const arr = [1, 2, 5, 6, 7];
 const tree = new Tree(arr);
 prettyPrint(tree.root);
 tree.levelOrder((node) => {
   console.log(node.data);
-});
-tree.levelOrderRec((node) => {
+})
+console.log();
+tree.inOrder((node) => {
   console.log(node.data);
-});
+})
+;
 export default Tree;
