@@ -7,6 +7,36 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  deleteItem(value) {
+    let parentNode = this.root;
+    let node = parentNode;
+    while (node != null) {
+      if (value == node.data) {
+        break;
+      }
+      parentNode = node;
+      if (value < node.data) {
+        node = node.left;
+      } else {
+        node = node.right;
+      }
+    }
+    
+    if (node == null) return;
+    if (node.left == null) {
+      node = node.right;
+    } else {
+      node.left.right = node.right;
+      node = node.left;
+    }
+
+    if (value < parentNode.data) {
+      parentNode.left = node
+    } else {
+      parentNode.right = node
+    }
+  }
+
   insert(value) {
     let node = this.root;
     if (node == null) {
@@ -56,10 +86,12 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 };
 
 console.log('\x1b[2J\x1b[3J\x1b[H');
-const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// const arr = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 // const arr = [1, 2, 5, 6, 7];
 const tree = new Tree(arr);
 tree.insert(8);
+prettyPrint(tree.root);
+tree.deleteItem(9);
 prettyPrint(tree.root);
 
 export default Tree;
