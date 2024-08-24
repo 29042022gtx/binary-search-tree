@@ -7,6 +7,40 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  depth(node) {
+    let targetNode = this.find(node.data);
+    if (targetNode == null) {
+      return 0;
+    }
+    let nodes = [];
+    const wrapperNode = new Node();
+    wrapperNode.left = this.root
+    let subNodes = [wrapperNode];
+    let heightVal = -1;
+
+    while (true) {
+      heightVal += 1;
+      nodes = subNodes;
+      subNodes = [];
+      while (nodes.length != 0) {
+        targetNode = nodes.pop();
+        if (targetNode.left != null) {
+          subNodes.push(targetNode.left);
+        }
+        if (targetNode.right != null) {
+          subNodes.push(targetNode.right);
+        }
+      }
+      const gotTarget = subNodes.some((subNode) => {
+        return node.data == subNode.data;
+      })
+      if (gotTarget) {
+        break
+      }
+    }
+    return heightVal;
+  }
+
   height(node) {
     let nodeInTree = this.find(node.data);
     if (nodeInTree == null) {
@@ -232,5 +266,5 @@ tree.insert(8);
 tree.insert(9);
 prettyPrint(tree.root);
 console.log();
-console.log(tree.height(new Node(6)));
+console.log(tree.depth(new Node(4)));
 export default Tree;
