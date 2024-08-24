@@ -7,6 +7,25 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  postOrder(callback) {
+    function subPostOrder(node) {
+      if (node == null) {
+        return []
+      }
+      return [node]
+        .concat(subPostOrder(node.right))
+        .concat(subPostOrder(node.left))
+    }
+
+    if (callback == null) {
+      throw new Error('No callback is specified!');
+    }
+    const arr = subPostOrder(this.root);
+    for (let i = arr.length - 1; i >= 0; i--) {
+      callback(arr[i])
+    }
+  }
+
   preOrder(callback) {
     function subPreOrder(node) {
       if (node == null) {
@@ -189,7 +208,7 @@ tree.levelOrder((node) => {
   console.log(node.data);
 })
 console.log();
-tree.preOrder((node) => {
+tree.postOrder((node) => {
   console.log(node.data);
 })
 ;
