@@ -7,14 +7,40 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  height(node) {
+    let nodeInTree = this.find(node.data);
+    if (nodeInTree == null) {
+      return 0;
+    }
+    let nodes = [];
+    let subNodes = [nodeInTree];
+    let heightVal = -1;
+
+    while (subNodes.length != 0) {
+      heightVal += 1;
+      nodes = subNodes;
+      subNodes = [];
+      while (nodes.length != 0) {
+        nodeInTree = nodes.pop();
+        if (nodeInTree.left != null) {
+          subNodes.push(nodeInTree.left);
+        }
+        if (nodeInTree.right != null) {
+          subNodes.push(nodeInTree.right);
+        }
+      }
+    }
+    return heightVal;
+  }
+
   postOrder(callback) {
     function subPostOrder(node) {
       if (node == null) {
-        return []
+        return [];
       }
       return [node]
         .concat(subPostOrder(node.right))
-        .concat(subPostOrder(node.left))
+        .concat(subPostOrder(node.left));
     }
 
     if (callback == null) {
@@ -22,18 +48,18 @@ class Tree {
     }
     const arr = subPostOrder(this.root);
     for (let i = arr.length - 1; i >= 0; i--) {
-      callback(arr[i])
+      callback(arr[i]);
     }
   }
 
   preOrder(callback) {
     function subPreOrder(node) {
       if (node == null) {
-        return []
+        return [];
       }
       return subPreOrder(node.right)
         .concat(subPreOrder(node.left))
-        .concat(node)
+        .concat(node);
     }
 
     if (callback == null) {
@@ -41,18 +67,16 @@ class Tree {
     }
     const arr = subPreOrder(this.root);
     for (let i = arr.length - 1; i >= 0; i--) {
-      callback(arr[i])
+      callback(arr[i]);
     }
   }
 
   inOrder(callback) {
     function subInOrder(node) {
       if (node == null) {
-        return []
+        return [];
       }
-      return subInOrder(node.right)
-        .concat(node)
-        .concat(subInOrder(node.left))
+      return subInOrder(node.right).concat(node).concat(subInOrder(node.left));
     }
 
     if (callback == null) {
@@ -60,7 +84,7 @@ class Tree {
     }
     const arr = subInOrder(this.root);
     for (let i = arr.length - 1; i >= 0; i--) {
-      callback(arr[i])
+      callback(arr[i]);
     }
   }
 
@@ -203,13 +227,10 @@ console.log('\x1b[2J\x1b[3J\x1b[H');
 const arr = [1, 2, 3, 4, 5, 6, 7];
 // const arr = [1, 2, 5, 6, 7];
 const tree = new Tree(arr);
+tree.insert(-1);
+tree.insert(8);
+tree.insert(9);
 prettyPrint(tree.root);
-tree.levelOrder((node) => {
-  console.log(node.data);
-})
 console.log();
-tree.postOrder((node) => {
-  console.log(node.data);
-})
-;
+console.log(tree.height(new Node(6)));
 export default Tree;
