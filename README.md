@@ -1,5 +1,5 @@
 # Binary Search Trees
-## Instruction from The Odin Project
+## [Instruction from The Odin Project](https://www.theodinproject.com/lessons/javascript-binary-search-trees)
 
 
 1. Build a `Node` class/factory. It should have an attribute for the data it stores as well as its left and right children.
