@@ -4,21 +4,39 @@ class Tree {
   root = new Node();
 
   constructor(arr) {
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = i + 1; j < arr.length; j++)
+        if (arr[j] == arr[i]) {
+          arr.splice(j, 1);
+          j -= 1;
+        }
+    }
+    arr.sort((a, b) => {
+      return a - b;
+    });
+    this.root = this.buildTree(arr);
+  }
+
+  rebalance() {
+    const arr = [];
+    this.inOrder((node) => {
+      arr.push(node.data);
+    });
     this.root = this.buildTree(arr);
   }
 
   isBalanced() {
     let balanced = true;
     this.levelOrder((node) => {
-      let leftHeight
-      let rightHeight
+      let leftHeight;
+      let rightHeight;
       if (node.left == null) {
         leftHeight = 0;
       } else {
         leftHeight = this.height(node.left);
       }
       if (node.right == null) {
-        rightHeight = 0
+        rightHeight = 0;
       } else {
         rightHeight = this.height(node.right);
       }
@@ -255,7 +273,7 @@ class Tree {
     }
   }
 
-  buildTree(array, start = 0, end = arr.length - 1) {
+  buildTree(array, start = 0, end = array.length - 1) {
     if (start > end) return null;
 
     const mid = Math.round((end + start) / 2);
@@ -265,29 +283,23 @@ class Tree {
 
     return root;
   }
+
+  static prettyPrint(node, prefix = '', isLeft = true) {
+    if (node === null) {
+      return;
+    }
+    if (node.right !== null) {
+      Tree.prettyPrint(
+        node.right,
+        `${prefix}${isLeft ? '│   ' : '    '}`,
+        false,
+      );
+    }
+    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+    if (node.left !== null) {
+      Tree.prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+    }
+  }
 }
 
-const prettyPrint = (node, prefix = '', isLeft = true) => {
-  if (node === null) {
-    return;
-  }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-  }
-  console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-  }
-};
-
-console.log('\x1b[2J\x1b[3J\x1b[H');
-const arr = [1, 2, 3, 4, 5, 6, 7];
-// const arr = [1, 2, 5, 6, 7];
-const tree = new Tree(arr);
-tree.insert(-1);
-tree.insert(8);
-tree.insert(9);
-prettyPrint(tree.root);
-console.log();
-console.log(tree.isBalanced());
 export default Tree;
