@@ -7,6 +7,29 @@ class Tree {
     this.root = this.buildTree(arr);
   }
 
+  isBalanced() {
+    let balanced = true;
+    this.levelOrder((node) => {
+      let leftHeight
+      let rightHeight
+      if (node.left == null) {
+        leftHeight = 0;
+      } else {
+        leftHeight = this.height(node.left);
+      }
+      if (node.right == null) {
+        rightHeight = 0
+      } else {
+        rightHeight = this.height(node.right);
+      }
+      const subtract = leftHeight - rightHeight;
+      if (subtract > 1 || subtract < -1) {
+        balanced = false;
+      }
+    });
+    return balanced;
+  }
+
   depth(node) {
     let targetNode = this.find(node.data);
     if (targetNode == null) {
@@ -14,7 +37,7 @@ class Tree {
     }
     let nodes = [];
     const wrapperNode = new Node();
-    wrapperNode.left = this.root
+    wrapperNode.left = this.root;
     let subNodes = [wrapperNode];
     let heightVal = -1;
 
@@ -33,9 +56,9 @@ class Tree {
       }
       const gotTarget = subNodes.some((subNode) => {
         return node.data == subNode.data;
-      })
+      });
       if (gotTarget) {
-        break
+        break;
       }
     }
     return heightVal;
@@ -266,5 +289,5 @@ tree.insert(8);
 tree.insert(9);
 prettyPrint(tree.root);
 console.log();
-console.log(tree.depth(new Node(4)));
+console.log(tree.isBalanced());
 export default Tree;
